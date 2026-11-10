@@ -1,0 +1,175 @@
+/*
+ * globals.css — design tokens, page defaults and the layout classes every section uses.
+ * Typography is in fonts.css. One breakpoint for everything custom: 48rem (768px), Tailwind's md.
+ *
+ *   1. Tokens   colours, spacing rhythm, container, easing — each one is also a Tailwind utility
+ *   2. Base     page defaults
+ *   3. Layout   container · section · padding · center · cover · no-scrollbar
+ *   4. Motion   marquee, scroll-animation pre-hide, reduced motion
+ */
+@import "tailwindcss";
+@import "./fonts.css";
+
+/* ---------- 1. Tokens ------------------------------------------------------------------ */
+/*
+ * --color-ink → text-ink, bg-ink, border-ink …   --spacing-section → py-section, mt-section …
+ * Re-skin a brand here, and keep siteConfig.colors (src/config/site.js) in step for the generated icons.
+ */
+@theme static {
+  /* Colour */
+  --color-ink: #111111; /* text, buttons */
+  --color-paper: #ffffff; /* page background */
+  --color-muted: #6b6b6b; /* secondary text */
+  --color-line: #e6e6e6; /* borders, rules */
+  --color-surface: #f5f5f3; /* tinted sections, cards, image placeholders */
+  --color-accent: #b08d57; /* brand highlight */
+  --color-error: #b42318; /* form errors */
+
+  /* Spacing rhythm — phones; desktop values below */
+  --spacing-gutter: 1rem; /* page side padding → px-gutter (.container, .padding) */
+  --spacing-section: 4rem; /* a section's top + bottom padding → py-section (.section) */
+  --spacing-stack: 2.5rem; /* between blocks inside a section → mt-stack, gap-stack */
+  --spacing-grid: 1rem; /* between cards and columns → gap-grid */
+  --spacing-header: 4rem; /* fixed header height → h-header, top-header */
+  /* A page's first section, clear of the fixed header → pt-page */
+  --spacing-page: calc(var(--spacing-header) + var(--spacing-section));
+
+  /* Layout */
+  --container-site: 120rem; /* max content width → .container, max-w-site */
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1); /* → ease-out-expo */
+}
+
+@media (width >= 48rem) {
+  :root {
+    /* Desktop */
+    --spacing-gutter: 3.5rem;
+    --spacing-section: 6rem;
+    --spacing-stack: 3.5rem;
+    --spacing-grid: 1.25rem;
+    --spacing-header: 5rem;
+  }
+}
+
+/* ---------- 2. Base ------------------------------------------------------------------- */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    /* Scrollbar hidden site-wide — the page still scrolls. Delete these two rules to show it. */
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  body {
+    min-height: 100svh;
+    /* No sideways scroll — and unlike `hidden`, clip doesn't break position: sticky */
+    overflow-x: clip;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  /* Links to #sections land below the fixed header */
+  [id] {
+    scroll-margin-top: var(--spacing-header);
+  }
+
+  button,
+  summary,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+}
+
+/* ---------- 3. Layout ----------------------------------------------------------------- */
+/* Centred content, capped at --container-site, with the page gutter on both sides */
+@utility container {
+  width: 100%;
+  max-width: var(--container-site);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* A page section: relative, with the vertical rhythm */
+@utility section {
+  position: relative;
+  padding-block: var(--spacing-section);
+}
+
+/* Only the side gutter — for full-bleed blocks that still need the page padding */
+@utility padding {
+  padding-inline: var(--spacing-gutter);
+}
+
+@utility center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Media that fills its frame */
+@utility cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------- 4. Motion ----------------------------------------------------------------- */
+@theme {
+  /* On a track that holds its content twice: an endless loop */
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+/*
+ * Scroll-animated elements (src/components/animation/GlobalAnimations.jsx) stay hidden until their
+ * animation is ready, so nothing flashes before it starts — and show anyway after 3s.
+ */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  :is([data-heading-effect], [data-para-effect], [data-img-effect], [data-reveal]):not([data-animated]) {
+    visibility: hidden;
+    animation: reveal-fallback 0s 3s forwards;
+  }
+}
+
+@keyframes reveal-fallback {
+  to {
+    visibility: visible;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

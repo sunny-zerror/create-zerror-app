@@ -1,0 +1,193 @@
+/*
+ * fonts.css — all typography. Change a value here and the whole site follows.
+ * Imported by globals.css, so Tailwind turns the tokens below into utilities.
+ *
+ *   1. Brand fonts   @font-face — files in public/fonts/<family>/
+ *   2. Families      --font-primary (headings) · --font-secondary (body, UI)
+ *   3. Root size     the html font-size every rem on the site scales from
+ *   4. Headings      h1–h6 sizes, mobile then desktop — also .h1–.h6 and text-h1 … text-h6
+ *   5. Text styles   text-body-lg · text-body · text-caption · text-eyebrow · text-cta
+ *
+ * Breakpoint: 48rem (768px), Tailwind's md — the same one globals.css uses.
+ */
+
+/* ---------- 1. Brand fonts ---------------------------------------------------------- */
+/*
+ * Put .woff2 files in public/fonts/<family>/ (convert TTF/OTF at transfonter.org), declare
+ * every weight under ONE family name, then name that family first in section 2:
+ *
+ * @font-face {
+ *   font-family: "Primary";
+ *   src: url("../../public/fonts/primary/Primary-Regular.woff2") format("woff2");
+ *   font-weight: 400;
+ *   font-style: normal;
+ *   font-display: swap;
+ * }
+ *
+ * @font-face {
+ *   font-family: "Primary";
+ *   src: url("../../public/fonts/primary/Primary-Medium.woff2") format("woff2");
+ *   font-weight: 500;
+ *   font-style: normal;
+ *   font-display: swap;
+ * }
+ *
+ * A variable font needs one block, with a range: font-weight: 100 900;
+ */
+
+/* ---------- 2. Families --------------------------------------------------------------- */
+@theme static {
+  /* Headings, display → font-primary */
+  --font-primary: "Primary", Georgia, "Times New Roman", serif;
+  /* Body, UI → font-secondary */
+  --font-secondary:
+    "Secondary", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* The same as classes */
+@utility primary-font {
+  font-family: var(--font-primary);
+}
+
+@utility secondary-font {
+  font-family: var(--font-secondary);
+}
+
+/* ---------- 3. Root size -------------------------------------------------------------- */
+@layer base {
+  /* Phones */
+  html {
+    font-size: 14px;
+  }
+
+  /*
+   * 768px and up: fluid. 1rem is 16px on the 1440px desktop design and grows and shrinks with
+   * the screen, so a layout built in rem keeps its proportions; capped at 18px on wide screens.
+   * For a fixed desktop size instead: font-size: 16px;
+   */
+  @media (width >= 48rem) {
+    html {
+      font-size: min(calc(100vw * 16 / 1440), 18px);
+    }
+  }
+}
+
+/* ---------- 4. Headings ----------------------------------------------------------------- */
+/* One size per level — h1–h6, the .h1–.h6 classes and the text-h1 … text-h6 utilities all read these */
+@theme static {
+  /* Mobile */
+  --text-h1: 2.5rem;
+  --text-h2: 2.25rem;
+  --text-h3: 2rem;
+  --text-h4: 1.75rem;
+  --text-h5: 1.5rem;
+  --text-h6: 1rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    /* Desktop */
+    --text-h1: 3.75rem;
+    --text-h2: 2.75rem;
+    --text-h3: 2.5rem;
+    --text-h4: 2rem;
+    --text-h5: 1.75rem;
+    --text-h6: 1.25rem;
+  }
+}
+
+/* In the base layer, so utilities on a heading (text-sm, leading-*, font-*) still win */
+@layer base {
+  body {
+    font-family: var(--font-secondary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .h5,
+  .h6 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  h1,
+  .h1 {
+    font-size: var(--text-h1);
+  }
+
+  h2,
+  .h2 {
+    font-size: var(--text-h2);
+  }
+
+  h3,
+  .h3 {
+    font-size: var(--text-h3);
+  }
+
+  h4,
+  .h4 {
+    font-size: var(--text-h4);
+  }
+
+  h5,
+  .h5 {
+    font-size: var(--text-h5);
+  }
+
+  h6,
+  .h6 {
+    font-size: var(--text-h6);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* ---------- 5. Text styles --------------------------------------------------------------- */
+@utility text-body-lg {
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+@utility text-body {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+@utility text-caption {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Small uppercase label above a heading */
+@utility text-eyebrow {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Buttons and menu links */
+@utility text-cta {
+  font-size: 0.875rem;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

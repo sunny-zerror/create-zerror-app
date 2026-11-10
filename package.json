@@ -1,0 +1,33 @@
+{
+  "name": "create-zerror-app",
+  "version": "0.1.0",
+  "description": "Start a new Zerror project: a z-commerce storefront (TypeScript) or a frontend site (JavaScript), both on Next.js.",
+  "keywords": [
+    "create",
+    "starter",
+    "template",
+    "nextjs",
+    "z-commerce",
+    "zerror"
+  ],
+  "author": "Zerror Studios",
+  "license": "UNLICENSED",
+  "type": "module",
+  "bin": {
+    "create-zerror-app": "index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "lib",
+    "templates"
+  ],
+  "engines": {
+    "node": ">=20.12.0"
+  },
+  "scripts": {
+    "test": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.9.0"
+  }
+}
