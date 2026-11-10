@@ -11,6 +11,12 @@ import { TEMPLATES, scaffold } from "../lib/scaffold.mjs";
 const root = mkdtempSync(join(tmpdir(), "create-zerror-app-"));
 let failed = false;
 
+// A CRLF shebang ("node\r") runs fine on Windows but won't start on macOS/Linux
+if (readFileSync(new URL("../index.mjs", import.meta.url), "utf8").split("\n")[0].endsWith("\r")) {
+  failed = true;
+  console.error("✖ index.mjs has a CRLF shebang — convert it to LF line endings before publishing");
+} else console.log("✔ shebang");
+
 try {
   for (const template of Object.keys(TEMPLATES)) {
     const name = `Smoke Test ${template}`;

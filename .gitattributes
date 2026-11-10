@@ -1,0 +1,6 @@
+# Keep LF on disk on every OS: npm publishes the working copy, and a CRLF shebang
+# (#!/usr/bin/env node\r) stops the CLI from starting on macOS and Linux.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary

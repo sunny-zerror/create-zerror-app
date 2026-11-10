@@ -8,6 +8,8 @@ npm create zerror-app@latest
 
 It asks two things — the project name and what you're building — then creates the folder, installs dependencies and makes the first git commit.
 
+Don't use `npm i create-zerror-app`: that only downloads the package into `node_modules` and never runs it.
+
 ```
 ┌  create-zerror-app
 ◇  Project name?
@@ -68,6 +70,7 @@ cd test-store && npm run check && npm run build
 ## Releasing
 
 ```bash
+npm test                         # also fails if index.mjs picked up Windows line endings
 npm version patch                # 0.1.0 → 0.1.1 (minor for new features, major for breaking changes)
 git push --follow-tags
 npm publish
